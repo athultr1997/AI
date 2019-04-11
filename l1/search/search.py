@@ -91,8 +91,36 @@ def depthFirstSearch(problem):
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    from game import Directions
+    from util import Queue
+
+    startState = (problem.getStartState(),Directions.STOP,0)
+    frontiers = Queue()
+    frontiers.push(startState)
+    exploredSet = list()
+    exploredSet.append(startState[0])
+    actions = list()
+
+    while not frontiers.isEmpty():
+        state = frontiers.pop()
+        successors = problem.getSuccessors(state[0])
+
+        for successor in successors:
+            if successor[0] not in list(zip(*exploredSet)[0]):#checking if the successors have already been explored
+                if problem.isGoalState(successor[0]):                
+                    actions.append(successor[1])
+                    parent = [x for x in problem.getSuccessors(successor[0]) if x[1]==Directions.REVERSE[successor[1]]][0]
+
+                    while parent[0] != startState[0]:
+                        actions.insert(0,[x for x in exploredSet if x[0]==parent[0]][0][1])
+                        parent = [x for x in problem.getSuccessors(parent[0]) if x[1]==Directions.REVERSE[actions[0]]][0]
+
+                    return actions    
+                else:
+                    frontiers.push(successor)
+                    exploredSet.append(successor)
+
+    return [Directions.STOP]
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
