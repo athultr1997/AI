@@ -87,10 +87,44 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    from game import Directions
+    from util import Stack
+
+    startState = (problem.getStartState(),Directions.STOP,0)
+    print startState
+    frontiers = Stack()
+    frontiers.push(startState)
+    exploredSet = list()
+    exploredSet.append(startState[0])
+    actions = list()
+
+    while not frontiers.isEmpty():
+        node = frontiers.pop()
+        exploredSet.append(node)
+        successors = problem.getSuccessors(node[0])
+
+        for successor in successors:
+            if successor[0] not in list(zip(*exploredSet)[0]):
+                if problem.isGoalState(successor[0]):
+                    actions.append(successor[1])
+                    parent = [x for x in problem.getSuccessors(successor[0]) if x[1]==Directions.REVERSE[successor[1]]][0]
+                    while parent[0] != startState[0]:
+                        actions.insert(0,[x for x in exploredSet if x[0]==parent[0]][0][1])
+                        parent = [x for x in problem.getSuccessors(parent[0]) if x[1]==Directions.REVERSE[actions[0]]][0]
+                    return actions
+                elif not frontiers.isEmpty():
+                    if successor[0] not in list(zip(*frontiers.list)[0]):
+                        frontiers.push(successor)
+                else:
+                    frontiers.push(successor)
+
+        print frontiers.list
+
+    return [Directions.STOP]
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
+    "*** YOUR CODE HERE ***"
     from game import Directions
     from util import Queue
 
@@ -106,7 +140,7 @@ def breadthFirstSearch(problem):
         successors = problem.getSuccessors(state[0])
 
         for successor in successors:
-            if successor[0] not in list(zip(*exploredSet)[0]):#checking if the successors have already been explored
+            if successor[0] not in list(zip(*exploredSet)[0]):#checking if the successors have already been explored (add frontiers)
                 if problem.isGoalState(successor[0]):                
                     actions.append(successor[1])
                     parent = [x for x in problem.getSuccessors(successor[0]) if x[1]==Directions.REVERSE[successor[1]]][0]
@@ -124,8 +158,37 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    from util import PriorityQueue
+    from game import Directions
+
+    exploredSet = list()
+    actions = list()
+    startNode = (problem.getStartState(),Directions.STOP,0)
+    frontiers = PriorityQueue()
+    frontiers.push(startNode,0)
+
+    while not frontiers.isEmpty():
+        node = frontiers.pop()
+        if problem.isGoalState(node[0]):
+
+            return actions
+        else:
+            exploredSet.append(node)
+            successors = problem.getSuccessors(node[0])
+            for successor in successors:
+                if successor not in list(zip(*exploredSet)[0]):
+                    frontier.push(successor)
+                    
+
+
+
+
+
+
+
+
+
+    return [Directions.STOP]
 
 def nullHeuristic(state, problem=None):
     """
