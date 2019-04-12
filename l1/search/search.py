@@ -118,8 +118,6 @@ def depthFirstSearch(problem):
                 else:
                     frontiers.push(successor)
 
-        print frontiers.list
-
     return [Directions.STOP]
 
 def breadthFirstSearch(problem):
@@ -136,28 +134,30 @@ def breadthFirstSearch(problem):
     actions = list()
 
     while not frontiers.isEmpty():
-        state = frontiers.pop()
-        successors = problem.getSuccessors(state[0])
+        node = frontiers.pop()
+        exploredSet.append(node)
+        successors = problem.getSuccessors(node[0])
 
         for successor in successors:
             if successor[0] not in list(zip(*exploredSet)[0]):#checking if the successors have already been explored (add frontiers)
                 if problem.isGoalState(successor[0]):                
                     actions.append(successor[1])
                     parent = [x for x in problem.getSuccessors(successor[0]) if x[1]==Directions.REVERSE[successor[1]]][0]
-
                     while parent[0] != startState[0]:
                         actions.insert(0,[x for x in exploredSet if x[0]==parent[0]][0][1])
                         parent = [x for x in problem.getSuccessors(parent[0]) if x[1]==Directions.REVERSE[actions[0]]][0]
-
-                    return actions    
+                    return actions
+                elif not frontiers.isEmpty():
+                    if successor[0] not in list(zip(*frontiers.list)[0]):
+                        frontiers.push(successor)    
                 else:
                     frontiers.push(successor)
-                    exploredSet.append(successor)
 
     return [Directions.STOP]
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
+    "*** YOUR CODE HERE ***"
     from util import PriorityQueue
     from game import Directions
 
