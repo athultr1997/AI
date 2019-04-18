@@ -288,6 +288,12 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        """
+        A search state in this problem is a tuple ( pacmanPosition, cornersGrid ) where
+            pacmanPosition: a tuple (x,y) of integers specifying Pacman's position
+            corners: a tuple containing the cartesian coordinates of all the corners
+        """
+        self.cornersToVisit = self.corners[:]
 
     def getStartState(self):
         """
@@ -295,14 +301,18 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return self.startingPosition
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        if state in self.cornersToVisit:
+            self.cornersToVisit = tuple(x for x in self.cornersToVisit if x!=state)
+            return True
+            
+        return False
 
     def getSuccessors(self, state):
         """
@@ -325,6 +335,13 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            x,y = state
+            dx,dy = Actions.directionToVector(action)
+            nextx,nexty = int(x+dx), int(y+dy)
+            if not self.walls[nextx][nexty]:
+                nextState = (nextx,nexty)
+                cost = 1
+                successors.append((nextState,action,cost))
 
         self._expanded += 1 # DO NOT CHANGE
         return successors

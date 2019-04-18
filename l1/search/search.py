@@ -126,12 +126,15 @@ def breadthFirstSearch(problem):
     from game import Directions
     from util import Queue
 
+    goal_detect = False
     startState = (problem.getStartState(),Directions.STOP,0)
+    print("start state =",startState[0])
     frontiers = Queue()
     frontiers.push(startState)
     exploredSet = list()
     exploredSet.append(startState[0])
-    actions = list()
+    actionsTotal = list()
+    actionsSingleGoal = list()
 
     while not frontiers.isEmpty():
         node = frontiers.pop()
@@ -141,19 +144,30 @@ def breadthFirstSearch(problem):
         for successor in successors:
             if successor[0] not in list(zip(*exploredSet)[0]):#checking if the successors have already been explored (add frontiers)
                 if problem.isGoalState(successor[0]):                
-                    actions.append(successor[1])
+                    actionsSingleGoal.append(successor[1])
                     parent = [x for x in problem.getSuccessors(successor[0]) if x[1]==Directions.REVERSE[successor[1]]][0]
                     while parent[0] != startState[0]:
-                        actions.insert(0,[x for x in exploredSet if x[0]==parent[0]][0][1])
-                        parent = [x for x in problem.getSuccessors(parent[0]) if x[1]==Directions.REVERSE[actions[0]]][0]
-                    return actions
+                        actionsSingleGoal.insert(0,[x for x in exploredSet if x[0]==parent[0]][0][1])
+                        parent = [x for x in problem.getSuccessors(parent[0]) if x[1]==Directions.REVERSE[actionsSingleGoal[0]]][0]
+                    goal_detect = True
+                    break
                 elif not frontiers.isEmpty():
                     if successor[0] not in list(zip(*frontiers.list)[0]):
                         frontiers.push(successor)    
                 else:
                     frontiers.push(successor)
 
-    return [Directions.STOP]
+        if goal_detect:
+            goal_detect = False
+            startState = (successor[0],Directions.STOP,0)
+            frontiers = Queue()
+            frontiers.push(startState)
+            exploredSet = list()
+            exploredSet.append(startState[0])
+            actionsTotal += actionsSingleGoal
+            actionsSingleGoal = list()
+
+    return actionsTotal
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
@@ -200,7 +214,40 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    from util import PriorityQueue
+    from game import Directions
+
+    startNode = (problem.getStartState(),Directions.STOP,0)
+    exploredSet = list()
+    actions = list()
+    frontiers = PriorityQueue()
+    frontiers.push(startNode,0)
+
+    while not frontiers.isEmpty():
+        node = frontiers.pop()
+        
+        if problem.isGoalState(node[0]):
+            actions.append(node[1])
+            parent = [x for x in problem.getSuccessors(node[0]) if x[1]==Directions.REVERSE[node[1]]][0]
+            while parent[0] != startNode[0]:
+                actions.insert(0,[x for x in exploredSet if x[0]==parent[0]][0][1])
+                parent = [x for x in problem.getSuccessors(parent[0]) if x[1]==Directions.REVERSE[actions[0]]][0]
+            return actions
+
+        exploredSet.append(node)
+        successors = problem.getSuccessors(node[0])
+
+        for successor in successors:
+            if successor[0] not in list(zip(*exploredSet)[0]):                
+                if not frontiers.isEmpty():
+                    if successor[0] not in list(zip(*frontiers.heap)[0]):
+                        cost = heuristic(successor[0],problem) + problem.getCostOfActions(actions + [successor[1]])
+                        frontiers.push(successor,cost)
+                else:
+                    cost = heuristic(successor[0],problem) + problem.getCostOfActions(actions + [successor[1]])
+                    frontiers.push(successor,cost)
+
+    return [Directions.STOP]
 
 
 # Abbreviations
