@@ -291,9 +291,10 @@ class CornersProblem(search.SearchProblem):
         """
         A search state in this problem is a tuple ( pacmanPosition, cornersGrid ) where
             pacmanPosition: a tuple (x,y) of integers specifying Pacman's position
-            corners: a tuple containing the cartesian coordinates of all the corners
+            cornersToVisit: a list containing the cartesian coordinates of all the corners to be visited
+            state = (pacmanPosition,cornersToVisit)
         """
-        self.cornersToVisit = self.corners[:]
+        self.count = 0
 
     def getStartState(self):
         """
@@ -301,18 +302,17 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        return self.startingPosition
+        return (self.startingPosition,self.corners)
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        if state in self.cornersToVisit:
-            self.cornersToVisit = tuple(x for x in self.cornersToVisit if x!=state)
+        if not state[1]:
             return True
-            
-        return False
+        else:
+            return False
 
     def getSuccessors(self, state):
         """
@@ -335,12 +335,18 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
-            x,y = state
+            x,y = state[0]
             dx,dy = Actions.directionToVector(action)
             nextx,nexty = int(x+dx), int(y+dy)
+            cost = 1
+
             if not self.walls[nextx][nexty]:
-                nextState = (nextx,nexty)
-                cost = 1
+                if (nextx,nexty) in state[1]:
+                    newCorners = tuple(x for x in state[1] if x!=(nextx,nexty))
+                    nextState = ((nextx,nexty),newCorners)
+                else:
+                    nextState = ((nextx,nexty),state[1])
+
                 successors.append((nextState,action,cost))
 
         self._expanded += 1 # DO NOT CHANGE
@@ -377,7 +383,64 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    manhattanDistance = lambda x1,y1,x2,y2: abs(x1-x2) + abs(y1-y2)
+    euclideanDistance = lambda x1,y1,x2,y2: ((x1-x2)**2+(y1-y2)**2)**0.5
+    """
+    Heuristic - 1: Sum of euclindean distance to all corners
+    Results: 1)Search nodes expanded: 945 for mediumCorners 2)Search nodes expanded: 9706 for bigCorners
+    """
+    h = 0
+    x,y = state[0]
+    for x_corner,y_corner in state[1]:
+        h += euclideanDistance(x,y,x_corner,y_corner)
+    """
+    Heuristic - 2: Euclidean distance to the nearest node
+    Results: Not converging
+    """
+    # h_min = 999999
+    # x,y = state[0]
+    # for x_corner,y_corner in state[1]:
+    #     h = euclideanDistance(x,y,x_corner,y_corner)
+    #     if h<h_min:
+    #         h_min = h
+    # h = h_min
+    """
+    Heuristic - 4: Sum of Manhattan distance
+    Results: Not converging
+    """
+    # x,y = state[0]
+    # h = 0
+    # for x_corner,y_corner in state[1]:
+    #     h += manhattanDistance(x,y,x_corner,y_corner)
+    """
+    Heuristic - 5: Minimum of Manhattan distance
+    Results: 
+    """
+    # h_min = 999999
+    # x,y = state[0]
+    # for x_corner,y_corner in state[1]:
+    #     h = manhattanDistance(x,y,x_corner,y_corner)
+    #     if h<h_min:
+    #         h_min = h
+    # h = h_min
+    """
+    Heuristic - 6: Sum of minimum distances from position of pacman to nearest nodes
+    Results: 1)Search nodes expanded: 18631 for bigCorners 2)Search nodes expanded: 29 for tinyCorners 
+            3) mediumCorners not converging
+    """
+    # x,y = state[0]
+    # cornersToVisit = list(state[1][:])
+    # h = 0
+    # while cornersToVisit:
+    #     distances = list()
+    #     for x_corner,y_corner in cornersToVisit:
+    #         distances.append(manhattanDistance(x,y,x_corner,y_corner))
+    #     minDis = min(distances)
+    #     x,y = cornersToVisit[distances.index(minDis)]
+    #     cornersToVisit.remove((x,y))
+    #     h += minDis
+
+    return h
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"

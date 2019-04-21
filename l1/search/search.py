@@ -90,33 +90,26 @@ def depthFirstSearch(problem):
     from game import Directions
     from util import Stack
 
-    startState = (problem.getStartState(),Directions.STOP,0)
-    print startState
     frontiers = Stack()
-    frontiers.push(startState)
+    frontiers.push(problem.getStartState())
+    pathToFrontiers = Stack()
+    pathToFrontiers.push([Directions.STOP])
     exploredSet = list()
-    exploredSet.append(startState[0])
-    actions = list()
 
     while not frontiers.isEmpty():
         node = frontiers.pop()
+        pathToNode = pathToFrontiers.pop()
         exploredSet.append(node)
-        successors = problem.getSuccessors(node[0])
+        successors = problem.getSuccessors(node)
 
-        for successor in successors:
-            if successor[0] not in list(zip(*exploredSet)[0]):
-                if problem.isGoalState(successor[0]):
-                    actions.append(successor[1])
-                    parent = [x for x in problem.getSuccessors(successor[0]) if x[1]==Directions.REVERSE[successor[1]]][0]
-                    while parent[0] != startState[0]:
-                        actions.insert(0,[x for x in exploredSet if x[0]==parent[0]][0][1])
-                        parent = [x for x in problem.getSuccessors(parent[0]) if x[1]==Directions.REVERSE[actions[0]]][0]
-                    return actions
-                elif not frontiers.isEmpty():
-                    if successor[0] not in list(zip(*frontiers.list)[0]):
-                        frontiers.push(successor)
-                else:
-                    frontiers.push(successor)
+        for child,direction,cost in successors:
+            if child not in exploredSet:
+                if child not in frontiers.list:
+                    if problem.isGoalState(child):
+                        return (pathToNode + [direction])
+                    else:
+                        frontiers.push(child)
+                        pathToFrontiers.push(pathToNode+[direction])
 
     return [Directions.STOP]
 
@@ -126,81 +119,69 @@ def breadthFirstSearch(problem):
     from game import Directions
     from util import Queue
 
-    goal_detect = False
-    startState = (problem.getStartState(),Directions.STOP,0)
-    print("start state =",startState[0])
     frontiers = Queue()
-    frontiers.push(startState)
+    frontiers.push(problem.getStartState())
+    pathToFrontiers = Queue()
+    pathToFrontiers.push([Directions.STOP])
     exploredSet = list()
-    exploredSet.append(startState[0])
-    actionsTotal = list()
-    actionsSingleGoal = list()
 
     while not frontiers.isEmpty():
         node = frontiers.pop()
+        pathToNode = pathToFrontiers.pop()
         exploredSet.append(node)
-        successors = problem.getSuccessors(node[0])
+        successors = problem.getSuccessors(node)
 
-        for successor in successors:
-            if successor[0] not in list(zip(*exploredSet)[0]):#checking if the successors have already been explored (add frontiers)
-                if problem.isGoalState(successor[0]):                
-                    actionsSingleGoal.append(successor[1])
-                    parent = [x for x in problem.getSuccessors(successor[0]) if x[1]==Directions.REVERSE[successor[1]]][0]
-                    while parent[0] != startState[0]:
-                        actionsSingleGoal.insert(0,[x for x in exploredSet if x[0]==parent[0]][0][1])
-                        parent = [x for x in problem.getSuccessors(parent[0]) if x[1]==Directions.REVERSE[actionsSingleGoal[0]]][0]
-                    goal_detect = True
-                    break
-                elif not frontiers.isEmpty():
-                    if successor[0] not in list(zip(*frontiers.list)[0]):
-                        frontiers.push(successor)    
-                else:
-                    frontiers.push(successor)
+        for child,direction,cost in successors:
+            if child not in exploredSet:
+                if child not in frontiers.list:
+                    if problem.isGoalState(child):
+                        return (pathToNode + [direction])
+                    else:
+                        frontiers.push(child)
+                        pathToFrontiers.push(pathToNode+[direction])
 
-        if goal_detect:
-            goal_detect = False
-            startState = (successor[0],Directions.STOP,0)
-            frontiers = Queue()
-            frontiers.push(startState)
-            exploredSet = list()
-            exploredSet.append(startState[0])
-            actionsTotal += actionsSingleGoal
-            actionsSingleGoal = list()
-
-    return actionsTotal
+    return [Directions.STOP]
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    from util import PriorityQueue
     from game import Directions
+    from util import PriorityQueue
 
-    exploredSet = list()
-    actions = list()
-    startNode = (problem.getStartState(),Directions.STOP,0)
     frontiers = PriorityQueue()
-    frontiers.push(startNode,0)
+    frontiers.push(problem.getStartState(),0)
+    pathToFrontiers = PriorityQueue()
+    pathToFrontiers.push([Directions.STOP],0)
+    exploredSet = list()
 
     while not frontiers.isEmpty():
         node = frontiers.pop()
-        if problem.isGoalState(node[0]):
+        pathToNode = pathToFrontiers.pop()
 
-            return actions
-        else:
-            exploredSet.append(node)
-            successors = problem.getSuccessors(node[0])
-            for successor in successors:
-                if successor not in list(zip(*exploredSet)[0]):
-                    frontier.push(successor)
-                    
+        if problem.isGoalState(node):
+            return pathToNode
 
+        exploredSet.append(node)
+        successors = problem.getSuccessors(node)
 
+        for child,direction,cost in successors:
+            if child not in exploredSet:
+                if child not in frontiers.heap:
+                    g = problem.getCostOfActions(pathToNode+[direction])
+                    frontiers.push(child,g)
+                    pathToFrontiers.push(pathToNode+[direction],g)
+                # else:
+                #     g = problem.getCostOfActions(pathToNode+[direction])
+                #     frontiers.update(child,g)
+                #     pathToFrontiers.update(pathToNode+[direction],g)
 
-
-
-
-
-
+                    # g_old,countChild,child = [(g,count,item) for g,count,item in frontiers.heap if item == child][0]
+                    # g_new = problem.getCostOfActions(pathToNode+[direction])
+                    # if g_new<g_old:
+                    #     frontiers.heap.remove((g_old,count,item))
+                    #     frontiers.push(child,g_new)
+                    #     g_old,countChild,path = [(g,count,item) for g,count,item in pathToFrontiers.heap if count == countChild][0]
+                    #     pathToFrontiers.push(pathToNode+[direction],g_new)
 
     return [Directions.STOP]
 
@@ -214,41 +195,42 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    from util import PriorityQueue
     from game import Directions
+    from util import PriorityQueue
 
-    startNode = (problem.getStartState(),Directions.STOP,0)
-    exploredSet = list()
-    actions = list()
     frontiers = PriorityQueue()
-    frontiers.push(startNode,0)
+    frontiers.push(problem.getStartState(),0)
+    pathToFrontiers = PriorityQueue()
+    pathToFrontiers.push([Directions.STOP],0)
+    exploredSet = list()
 
     while not frontiers.isEmpty():
         node = frontiers.pop()
-        
-        if problem.isGoalState(node[0]):
-            actions.append(node[1])
-            parent = [x for x in problem.getSuccessors(node[0]) if x[1]==Directions.REVERSE[node[1]]][0]
-            while parent[0] != startNode[0]:
-                actions.insert(0,[x for x in exploredSet if x[0]==parent[0]][0][1])
-                parent = [x for x in problem.getSuccessors(parent[0]) if x[1]==Directions.REVERSE[actions[0]]][0]
-            return actions
+        pathToNode = pathToFrontiers.pop()
+
+        if problem.isGoalState(node):
+            return pathToNode
 
         exploredSet.append(node)
-        successors = problem.getSuccessors(node[0])
+        successors = problem.getSuccessors(node)
 
-        for successor in successors:
-            if successor[0] not in list(zip(*exploredSet)[0]):                
-                if not frontiers.isEmpty():
-                    if successor[0] not in list(zip(*frontiers.heap)[0]):
-                        cost = heuristic(successor[0],problem) + problem.getCostOfActions(actions + [successor[1]])
-                        frontiers.push(successor,cost)
-                else:
-                    cost = heuristic(successor[0],problem) + problem.getCostOfActions(actions + [successor[1]])
-                    frontiers.push(successor,cost)
+        for child,direction,cost in successors:
+            if child not in exploredSet:
+                if child not in frontiers.heap:
+                    g = problem.getCostOfActions(pathToNode+[direction])
+                    h = heuristic(child,problem) 
+                    frontiers.push(child,g+h)
+                    pathToFrontiers.push(pathToNode+[direction],g+h)
+                # else:
+                #     f_old,countChild,child = [(f,count,item) for f,count,item in frontiers.heap if item == child][0]
+                #     f_new = problem.getCostOfActions(pathToNode+[direction])
+                #     if f_new<f_old:
+                #         frontiers.heap.remove((f_old,count,item))
+                #         frontiers.push(child,f_new)
+                #         f_old,countChild,path = [(f,count,item) for f,count,item in pathToFrontiers.heap if count == countChild][0]
+                #         pathToFrontiers.push(pathToNode+[direction],f_new)
 
     return [Directions.STOP]
-
 
 # Abbreviations
 bfs = breadthFirstSearch
