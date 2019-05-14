@@ -534,7 +534,52 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    euclideanDistance = lambda (x1,y1),(x2,y2): ((x1-x2)**2+(y1-y2)**2)**0.5
+    manhattanDistance = lambda (x1,y1),(x2,y2): abs(x1-x2) + abs(y1-y2)
+
+    """
+    Heuristic-1: Sum of Euclidean Distance to all the remaining food positions
+    Results: 1) trickySearch : 6125 search nodes expanded with cost of 65 in 9.0 sec
+             2) mediumSearch : 12641 search nodes expanded with cost of 643 in 51.3 sec
+    """
+    # remaining_food_positions = state[1].asList()
+    # pacmanPosition = state[0]
+    # h = 0
+
+    # for pos in remaining_food_positions:
+    #     h += euclideanDistance(pacmanPosition,pos)
+    """
+    Heuristic-2: No:of food remaining
+    Results: 1) No results showing
+    """
+    # remaining_food_positions = state[1].asList()
+    # h = len(remaining_food_positions)
+    """
+    Heuristic-3: Sum of Manhattan Distance to all the remaining food positions
+    Results: 1) trickySearch : 6062 search nodes expanded with cost of 61 in 8.6 sec
+             2) mediumSearch : 5153 search nodes expanded with cost of 587 in 10.7 sec
+    """
+    remaining_food_positions = state[1].asList()
+    pacmanPosition = state[0]
+    h = 0
+
+    for pos in remaining_food_positions:
+        h += manhattanDistance(pacmanPosition,pos)
+    """        
+    Heuristic-4: Sum of Manhattan Distance to all the remaining food positions from last food location
+    Results: 1) trickySearch : 10711 search nodes expanded with cost of 71 in 19.5 sec
+             2) mediumSearch : 2138 search nodes expanded with cost of 161 in 3.0 sec
+    """
+    # remaining_food_positions = state[1].asList()
+    # position = state[0]
+    # h = 0
+
+    # while remaining_food_positions:
+    #     foodPos = remaining_food_positions.pop(0)
+    #     h += manhattanDistance(position,foodPos)
+    #     position = foodPos
+
+    return h
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -565,7 +610,10 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        self.searchFunction = getattr(search,"breadthFirstSearch")
+        self.searchType = globals()["AnyFoodSearchProblem"]
+        actions = self.searchFunction(problem)
+        return actions
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -601,8 +649,11 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
-
+        if self.food[x][y]:
+            return True
+        else:
+            return False
+        
 def mazeDistance(point1, point2, gameState):
     """
     Returns the maze distance between any two points, using the search functions

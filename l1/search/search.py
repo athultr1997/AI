@@ -106,7 +106,7 @@ def depthFirstSearch(problem):
             if child not in exploredSet:
                 if child not in frontiers.list:
                     if problem.isGoalState(child):
-                        return (pathToNode + [direction])
+                        return (pathToNode + [direction])[1:]
                     else:
                         frontiers.push(child)
                         pathToFrontiers.push(pathToNode+[direction])
@@ -135,7 +135,7 @@ def breadthFirstSearch(problem):
             if child not in exploredSet:
                 if child not in frontiers.list:
                     if problem.isGoalState(child):
-                        return (pathToNode + [direction])
+                        return (pathToNode + [direction])[1:]
                     else:
                         frontiers.push(child)
                         pathToFrontiers.push(pathToNode+[direction])
@@ -159,7 +159,7 @@ def uniformCostSearch(problem):
         pathToNode = pathToFrontiers.pop()
 
         if problem.isGoalState(node):
-            return pathToNode
+            return pathToNode[1:]
 
         exploredSet.append(node)
         successors = problem.getSuccessors(node)
@@ -209,7 +209,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         pathToNode = pathToFrontiers.pop()
 
         if problem.isGoalState(node):
-            return pathToNode
+            return pathToNode[1:]
 
         exploredSet.append(node)
         successors = problem.getSuccessors(node)
