@@ -1,0 +1,67 @@
+\hypertarget{structInputData}{}\section{Input\+Data Struct Reference}
+\label{structInputData}\index{Input\+Data@{Input\+Data}}
+
+
+Data structure to store the input data for the coal allocation problem.  
+
+
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int $\ast$$\ast$$\ast$ \hyperlink{structInputData_a1dafb844546b53fd739be0f370676d28}{bid\+\_\+data}
+\item 
+int $\ast$$\ast$ \hyperlink{structInputData_abb16dba9ad2a732ace6dab1b1c9dec33}{bid\+\_\+data\+\_\+dimensions}
+\item 
+int $\ast$ \hyperlink{structInputData_a9ae50cca01b0b05cb38c55c328fc19fd}{bid\+\_\+data\+\_\+dimensions\+\_\+dimensions}
+\item 
+int \hyperlink{structInputData_a8da16cc608de69e099958cfdd162af5a}{num\+\_\+of\+\_\+coal\+\_\+blocks}
+\item 
+int \hyperlink{structInputData_a8b59f6e5325366bc964a42071441fa90}{num\+\_\+of\+\_\+companies}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Data structure to store the input data for the coal allocation problem. 
+
+It stores the data as a 3D array. 
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{structInputData_a1dafb844546b53fd739be0f370676d28}\label{structInputData_a1dafb844546b53fd739be0f370676d28}} 
+\index{Input\+Data@{Input\+Data}!bid\+\_\+data@{bid\+\_\+data}}
+\index{bid\+\_\+data@{bid\+\_\+data}!Input\+Data@{Input\+Data}}
+\subsubsection{\texorpdfstring{bid\+\_\+data}{bid\_data}}
+{\footnotesize\ttfamily int$\ast$$\ast$$\ast$ Input\+Data\+::bid\+\_\+data}
+
+3D array to store the input data. The first dimension corresponds to the company id (cid). The second dimension corresponds to the bids of the particular company set by the first dimension. The first instance in the third dimension is the bid value and the rest corresponds to the block id of the coal. Example usages\+:~\newline
+ bid\+\_\+data\mbox{[}i\mbox{]}\+: all the bid data corresponding to the company defined by id i+1 ~\newline
+ bid\+\_\+data\mbox{[}i\mbox{]}\mbox{[}j\mbox{]}\+: details of (i+1)-\/th company\textquotesingle{}s j-\/th bid ~\newline
+ bid\+\_\+data\mbox{[}i\mbox{]}\mbox{[}j\mbox{]}\mbox{[}0\mbox{]}\+: bid value ~\newline
+ bid\+\_\+data\mbox{[}i\mbox{]}\mbox{[}j\mbox{]}\mbox{[}k\mbox{]}\+: block id of the coal (where k$>$0) \mbox{\Hypertarget{structInputData_abb16dba9ad2a732ace6dab1b1c9dec33}\label{structInputData_abb16dba9ad2a732ace6dab1b1c9dec33}} 
+\index{Input\+Data@{Input\+Data}!bid\+\_\+data\+\_\+dimensions@{bid\+\_\+data\+\_\+dimensions}}
+\index{bid\+\_\+data\+\_\+dimensions@{bid\+\_\+data\+\_\+dimensions}!Input\+Data@{Input\+Data}}
+\subsubsection{\texorpdfstring{bid\+\_\+data\+\_\+dimensions}{bid\_data\_dimensions}}
+{\footnotesize\ttfamily int$\ast$$\ast$ Input\+Data\+::bid\+\_\+data\+\_\+dimensions}
+
+2D array to keep track of the size of \hyperlink{structInputData_a1dafb844546b53fd739be0f370676d28}{Input\+Data\+::bid\+\_\+data}. It is used since the length of each array in \hyperlink{structInputData_a1dafb844546b53fd739be0f370676d28}{Input\+Data\+::bid\+\_\+data} varies and there are no ways of determining it during runtime using sizeof-\/like functions. Hence, it has to be recorded. \mbox{\Hypertarget{structInputData_a9ae50cca01b0b05cb38c55c328fc19fd}\label{structInputData_a9ae50cca01b0b05cb38c55c328fc19fd}} 
+\index{Input\+Data@{Input\+Data}!bid\+\_\+data\+\_\+dimensions\+\_\+dimensions@{bid\+\_\+data\+\_\+dimensions\+\_\+dimensions}}
+\index{bid\+\_\+data\+\_\+dimensions\+\_\+dimensions@{bid\+\_\+data\+\_\+dimensions\+\_\+dimensions}!Input\+Data@{Input\+Data}}
+\subsubsection{\texorpdfstring{bid\+\_\+data\+\_\+dimensions\+\_\+dimensions}{bid\_data\_dimensions\_dimensions}}
+{\footnotesize\ttfamily int$\ast$ Input\+Data\+::bid\+\_\+data\+\_\+dimensions\+\_\+dimensions}
+
+1D array to keep track of the size of \hyperlink{structInputData_abb16dba9ad2a732ace6dab1b1c9dec33}{Input\+Data\+::bid\+\_\+data\+\_\+dimensions}. It is used since the length of each array in \hyperlink{structInputData_abb16dba9ad2a732ace6dab1b1c9dec33}{Input\+Data\+::bid\+\_\+data\+\_\+dimensions} varies and there are no ways of determining it during runtime using sizeof-\/like functions. Hence, it has to be recorded. \mbox{\Hypertarget{structInputData_a8da16cc608de69e099958cfdd162af5a}\label{structInputData_a8da16cc608de69e099958cfdd162af5a}} 
+\index{Input\+Data@{Input\+Data}!num\+\_\+of\+\_\+coal\+\_\+blocks@{num\+\_\+of\+\_\+coal\+\_\+blocks}}
+\index{num\+\_\+of\+\_\+coal\+\_\+blocks@{num\+\_\+of\+\_\+coal\+\_\+blocks}!Input\+Data@{Input\+Data}}
+\subsubsection{\texorpdfstring{num\+\_\+of\+\_\+coal\+\_\+blocks}{num\_of\_coal\_blocks}}
+{\footnotesize\ttfamily int Input\+Data\+::num\+\_\+of\+\_\+coal\+\_\+blocks}
+
+The number of coal blocks for auction. \mbox{\Hypertarget{structInputData_a8b59f6e5325366bc964a42071441fa90}\label{structInputData_a8b59f6e5325366bc964a42071441fa90}} 
+\index{Input\+Data@{Input\+Data}!num\+\_\+of\+\_\+companies@{num\+\_\+of\+\_\+companies}}
+\index{num\+\_\+of\+\_\+companies@{num\+\_\+of\+\_\+companies}!Input\+Data@{Input\+Data}}
+\subsubsection{\texorpdfstring{num\+\_\+of\+\_\+companies}{num\_of\_companies}}
+{\footnotesize\ttfamily int Input\+Data\+::num\+\_\+of\+\_\+companies}
+
+The number of companies who are participating in the auction. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{problem__solving__by__hill__climbing__search_8c}{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}\end{DoxyCompactItemize}

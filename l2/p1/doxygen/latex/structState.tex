@@ -1,0 +1,57 @@
+\hypertarget{structState}{}\section{State Struct Reference}
+\label{structState}\index{State@{State}}
+
+
+Represents the state of the problem at any moment during the search.  
+
+
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{structState_aff5c814b2070259023644917cc7bdd2e}{num\+\_\+of\+\_\+companies}
+\item 
+int \hyperlink{structState_a9d0176a5edaf8f81c9e69bc3e1579f04}{num\+\_\+of\+\_\+coal\+\_\+blocks}
+\item 
+int $\ast$ \hyperlink{structState_a52cd42ec679f0af76c92ff88d7a079a0}{selected\+\_\+bids\+\_\+from\+\_\+companies}
+\item 
+int $\ast$ \hyperlink{structState_a9b7fe730b545c321dec2897f8c3c8cbf}{allocated\+\_\+coal\+\_\+blocks}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Represents the state of the problem at any moment during the search. 
+
+The state at any moment is represented by\+:~\newline
+1) \hyperlink{structState_a52cd42ec679f0af76c92ff88d7a079a0}{State\+::selected\+\_\+bids\+\_\+from\+\_\+companies}~\newline
+2) \hyperlink{structState_a9b7fe730b545c321dec2897f8c3c8cbf}{State\+::allocated\+\_\+coal\+\_\+blocks} 
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{structState_a9b7fe730b545c321dec2897f8c3c8cbf}\label{structState_a9b7fe730b545c321dec2897f8c3c8cbf}} 
+\index{State@{State}!allocated\+\_\+coal\+\_\+blocks@{allocated\+\_\+coal\+\_\+blocks}}
+\index{allocated\+\_\+coal\+\_\+blocks@{allocated\+\_\+coal\+\_\+blocks}!State@{State}}
+\subsubsection{\texorpdfstring{allocated\+\_\+coal\+\_\+blocks}{allocated\_coal\_blocks}}
+{\footnotesize\ttfamily int$\ast$ State\+::allocated\+\_\+coal\+\_\+blocks}
+
+Represents the allocation status of the blocks of coal\+: 1) true\+: allocated 2) false\+: not allocated \mbox{\Hypertarget{structState_a9d0176a5edaf8f81c9e69bc3e1579f04}\label{structState_a9d0176a5edaf8f81c9e69bc3e1579f04}} 
+\index{State@{State}!num\+\_\+of\+\_\+coal\+\_\+blocks@{num\+\_\+of\+\_\+coal\+\_\+blocks}}
+\index{num\+\_\+of\+\_\+coal\+\_\+blocks@{num\+\_\+of\+\_\+coal\+\_\+blocks}!State@{State}}
+\subsubsection{\texorpdfstring{num\+\_\+of\+\_\+coal\+\_\+blocks}{num\_of\_coal\_blocks}}
+{\footnotesize\ttfamily int State\+::num\+\_\+of\+\_\+coal\+\_\+blocks}
+
+For storing the length of \hyperlink{structState_a9b7fe730b545c321dec2897f8c3c8cbf}{State\+::allocated\+\_\+coal\+\_\+blocks}. Does not change during the search. Defined for convenience. \mbox{\Hypertarget{structState_aff5c814b2070259023644917cc7bdd2e}\label{structState_aff5c814b2070259023644917cc7bdd2e}} 
+\index{State@{State}!num\+\_\+of\+\_\+companies@{num\+\_\+of\+\_\+companies}}
+\index{num\+\_\+of\+\_\+companies@{num\+\_\+of\+\_\+companies}!State@{State}}
+\subsubsection{\texorpdfstring{num\+\_\+of\+\_\+companies}{num\_of\_companies}}
+{\footnotesize\ttfamily int State\+::num\+\_\+of\+\_\+companies}
+
+For storing the length of \hyperlink{structState_a52cd42ec679f0af76c92ff88d7a079a0}{State\+::selected\+\_\+bids\+\_\+from\+\_\+companies}. Does not change during the search. Defined for convenience. \mbox{\Hypertarget{structState_a52cd42ec679f0af76c92ff88d7a079a0}\label{structState_a52cd42ec679f0af76c92ff88d7a079a0}} 
+\index{State@{State}!selected\+\_\+bids\+\_\+from\+\_\+companies@{selected\+\_\+bids\+\_\+from\+\_\+companies}}
+\index{selected\+\_\+bids\+\_\+from\+\_\+companies@{selected\+\_\+bids\+\_\+from\+\_\+companies}!State@{State}}
+\subsubsection{\texorpdfstring{selected\+\_\+bids\+\_\+from\+\_\+companies}{selected\_bids\_from\_companies}}
+{\footnotesize\ttfamily int$\ast$ State\+::selected\+\_\+bids\+\_\+from\+\_\+companies}
+
+Stores the indices of the selected bids from \hyperlink{structInputData}{Input\+Data}. It stores one bid from the set of bids proposed by a company. The index value corresponding to the bid data in \hyperlink{structInputData_a1dafb844546b53fd739be0f370676d28}{Input\+Data\+::bid\+\_\+data} is stored. A company from which no bid is sleceted has no\+\_\+bid value set at its index. Such a definition was used for the ease of change inside the code of generate\+\_\+successor. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{problem__solving__by__hill__climbing__search_8c}{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}\end{DoxyCompactItemize}

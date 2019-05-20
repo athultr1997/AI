@@ -1,0 +1,188 @@
+\hypertarget{problem__solving__by__hill__climbing__search_8c}{}\section{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c File Reference}
+\label{problem__solving__by__hill__climbing__search_8c}\index{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}}
+
+
+Code for solving the \textquotesingle{}Coal Allocation Problem\textquotesingle{} described in part-\/1 of l2.\+pdf using \textquotesingle{}Hill Climbing Search with Random Restarts\textquotesingle{}.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+Include dependency graph for problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=198pt]{problem__solving__by__hill__climbing__search_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structState}{State}
+\begin{DoxyCompactList}\small\item\em Represents the state of the problem at any moment during the search. \end{DoxyCompactList}\item 
+struct \hyperlink{structInputData}{Input\+Data}
+\begin{DoxyCompactList}\small\item\em Data structure to store the input data for the coal allocation problem. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{problem__solving__by__hill__climbing__search_8c_a41f9c5fb8b08eb5dc3edce4dcb37fee7}{true}~1
+\item 
+\#define \hyperlink{problem__solving__by__hill__climbing__search_8c_a65e9886d74aaee76545e83dd09011727}{false}~0
+\item 
+\#define \hyperlink{problem__solving__by__hill__climbing__search_8c_a262fff7b6a02b30bf9479c7a5e01f909}{no\+\_\+bid}~-\/1
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structState}{State} $\ast$ \hyperlink{problem__solving__by__hill__climbing__search_8c_a81dcbf0d7cbf48b5bb5513cdacf593fc}{create\+\_\+copy\+\_\+state} (struct \hyperlink{structState}{State} $\ast$state)
+\begin{DoxyCompactList}\small\item\em Utility function to create a copy of a \hyperlink{structState}{State} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{problem__solving__by__hill__climbing__search_8c_accf1874dc9bc755af633b93291382804}\label{problem__solving__by__hill__climbing__search_8c_accf1874dc9bc755af633b93291382804}} 
+int {\bfseries cost\+\_\+heuristic} (struct \hyperlink{structState}{State} $\ast$state, struct \hyperlink{structInputData}{Input\+Data} $\ast$input\+\_\+data)
+\item 
+\mbox{\Hypertarget{problem__solving__by__hill__climbing__search_8c_a207d35ea29548de1a03cb83daa2156a7}\label{problem__solving__by__hill__climbing__search_8c_a207d35ea29548de1a03cb83daa2156a7}} 
+int {\bfseries check\+\_\+bid\+\_\+collision} (int $\ast$allocated\+\_\+coal\+\_\+blocks, int $\ast$bid, int bid\+\_\+length)
+\item 
+struct \hyperlink{structState}{State} $\ast$ \hyperlink{problem__solving__by__hill__climbing__search_8c_a931e0f5e6aee376125af003fab57cfba}{generate\+\_\+successor} (struct \hyperlink{structState}{State} $\ast$old\+\_\+state, struct \hyperlink{structInputData}{Input\+Data} $\ast$input\+\_\+data)
+\item 
+\mbox{\Hypertarget{problem__solving__by__hill__climbing__search_8c_a90b929de2b481dcb8d65cacdbcb0ad25}\label{problem__solving__by__hill__climbing__search_8c_a90b929de2b481dcb8d65cacdbcb0ad25}} 
+struct \hyperlink{structState}{State} $\ast$ {\bfseries find\+\_\+initial\+\_\+state} (struct \hyperlink{structInputData}{Input\+Data} $\ast$input\+\_\+data)
+\item 
+\mbox{\Hypertarget{problem__solving__by__hill__climbing__search_8c_a62d9c3a87104c1f674b8063912c52337}\label{problem__solving__by__hill__climbing__search_8c_a62d9c3a87104c1f674b8063912c52337}} 
+struct \hyperlink{structState}{State} $\ast$ {\bfseries formulate\+\_\+goal} (struct \hyperlink{structInputData}{Input\+Data} $\ast$input\+\_\+data)
+\item 
+\mbox{\Hypertarget{problem__solving__by__hill__climbing__search_8c_a7db5c37cb88f315f06f893ffb290922b}\label{problem__solving__by__hill__climbing__search_8c_a7db5c37cb88f315f06f893ffb290922b}} 
+int {\bfseries is\+\_\+goal\+\_\+state} (struct \hyperlink{structState}{State} $\ast$state, struct \hyperlink{structState}{State} $\ast$goal\+\_\+state)
+\item 
+struct \hyperlink{structInputData}{Input\+Data} $\ast$ \hyperlink{problem__solving__by__hill__climbing__search_8c_abf96505e915ac91777e34ee4803fd109}{take\+\_\+input} (char file\+\_\+name\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Takes in input from the file name specified. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{problem__solving__by__hill__climbing__search_8c_a66893bf99465548eeebb9316e133daff}\label{problem__solving__by__hill__climbing__search_8c_a66893bf99465548eeebb9316e133daff}} 
+void {\bfseries display\+\_\+input\+\_\+data} (struct \hyperlink{structInputData}{Input\+Data} $\ast$input\+\_\+data)
+\item 
+\mbox{\Hypertarget{problem__solving__by__hill__climbing__search_8c_ad863c528bd134197eb4ec798a0018095}\label{problem__solving__by__hill__climbing__search_8c_ad863c528bd134197eb4ec798a0018095}} 
+void {\bfseries display\+\_\+state} (struct \hyperlink{structState}{State} $\ast$state, struct \hyperlink{structInputData}{Input\+Data} $\ast$input\+\_\+data)
+\item 
+\mbox{\Hypertarget{problem__solving__by__hill__climbing__search_8c_aa3190ec5f3a95333031d02ae42da0341}\label{problem__solving__by__hill__climbing__search_8c_aa3190ec5f3a95333031d02ae42da0341}} 
+void {\bfseries deallocate\+\_\+input\+\_\+data} (struct \hyperlink{structInputData}{Input\+Data} $\ast$input\+\_\+data)
+\item 
+void \hyperlink{problem__solving__by__hill__climbing__search_8c_a501244b2b99bea47cf78b36e87ee9d57}{deallocate\+\_\+state} (struct \hyperlink{structState}{State} $\ast$state)
+\begin{DoxyCompactList}\small\item\em Deallocates the memory used by an instance of struct \hyperlink{structState}{State}. \end{DoxyCompactList}\item 
+int \hyperlink{problem__solving__by__hill__climbing__search_8c_abf9e6b7e6f15df4b525a2e7705ba3089}{main} (int argc, char const $\ast$argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em The main function from which all function calls are made. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Code for solving the \textquotesingle{}Coal Allocation Problem\textquotesingle{} described in part-\/1 of l2.\+pdf using \textquotesingle{}Hill Climbing Search with Random Restarts\textquotesingle{}. 
+
+\begin{DoxyAuthor}{Author}
+Athul Thaliyachira Reji 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+16 May 2019 
+\end{DoxyDate}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{problem__solving__by__hill__climbing__search_8c_a65e9886d74aaee76545e83dd09011727}\label{problem__solving__by__hill__climbing__search_8c_a65e9886d74aaee76545e83dd09011727}} 
+\index{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}!false@{false}}
+\index{false@{false}!problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}}
+\subsubsection{\texorpdfstring{false}{false}}
+{\footnotesize\ttfamily \#define false~0}
+
+For use as boolean false \mbox{\Hypertarget{problem__solving__by__hill__climbing__search_8c_a262fff7b6a02b30bf9479c7a5e01f909}\label{problem__solving__by__hill__climbing__search_8c_a262fff7b6a02b30bf9479c7a5e01f909}} 
+\index{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}!no\+\_\+bid@{no\+\_\+bid}}
+\index{no\+\_\+bid@{no\+\_\+bid}!problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}}
+\subsubsection{\texorpdfstring{no\+\_\+bid}{no\_bid}}
+{\footnotesize\ttfamily \#define no\+\_\+bid~-\/1}
+
+Used in \hyperlink{structState_a52cd42ec679f0af76c92ff88d7a079a0}{State\+::selected\+\_\+bids\+\_\+from\+\_\+companies} at indices where no bid is selected from the company corresponding to that index \mbox{\Hypertarget{problem__solving__by__hill__climbing__search_8c_a41f9c5fb8b08eb5dc3edce4dcb37fee7}\label{problem__solving__by__hill__climbing__search_8c_a41f9c5fb8b08eb5dc3edce4dcb37fee7}} 
+\index{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}!true@{true}}
+\index{true@{true}!problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}}
+\subsubsection{\texorpdfstring{true}{true}}
+{\footnotesize\ttfamily \#define true~1}
+
+$<$ For printf() $<$ For fclose() and scanf() For use as boolean true 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{problem__solving__by__hill__climbing__search_8c_a81dcbf0d7cbf48b5bb5513cdacf593fc}\label{problem__solving__by__hill__climbing__search_8c_a81dcbf0d7cbf48b5bb5513cdacf593fc}} 
+\index{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}!create\+\_\+copy\+\_\+state@{create\+\_\+copy\+\_\+state}}
+\index{create\+\_\+copy\+\_\+state@{create\+\_\+copy\+\_\+state}!problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}}
+\subsubsection{\texorpdfstring{create\+\_\+copy\+\_\+state()}{create\_copy\_state()}}
+{\footnotesize\ttfamily struct \hyperlink{structState}{State}$\ast$ create\+\_\+copy\+\_\+state (\begin{DoxyParamCaption}\item[{struct \hyperlink{structState}{State} $\ast$}]{state }\end{DoxyParamCaption})}
+
+
+
+Utility function to create a copy of a \hyperlink{structState}{State} object. 
+
+There are various places in the program where a \hyperlink{structState}{State} type variable had to be copied. This function is useful in such situations. 
+\begin{DoxyParams}{Parameters}
+{\em state} & A pointer to an instance of \hyperlink{structState}{State} whose copy is to be made \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+new\+\_\+state A pointer to a copy of state 
+\end{DoxyReturn}
+\mbox{\Hypertarget{problem__solving__by__hill__climbing__search_8c_a501244b2b99bea47cf78b36e87ee9d57}\label{problem__solving__by__hill__climbing__search_8c_a501244b2b99bea47cf78b36e87ee9d57}} 
+\index{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}!deallocate\+\_\+state@{deallocate\+\_\+state}}
+\index{deallocate\+\_\+state@{deallocate\+\_\+state}!problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}}
+\subsubsection{\texorpdfstring{deallocate\+\_\+state()}{deallocate\_state()}}
+{\footnotesize\ttfamily void deallocate\+\_\+state (\begin{DoxyParamCaption}\item[{struct \hyperlink{structState}{State} $\ast$}]{state }\end{DoxyParamCaption})}
+
+
+
+Deallocates the memory used by an instance of struct \hyperlink{structState}{State}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em state} & The instance of struct \hyperlink{structState}{State} whose memory is to be deallocated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{problem__solving__by__hill__climbing__search_8c_a931e0f5e6aee376125af003fab57cfba}\label{problem__solving__by__hill__climbing__search_8c_a931e0f5e6aee376125af003fab57cfba}} 
+\index{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}!generate\+\_\+successor@{generate\+\_\+successor}}
+\index{generate\+\_\+successor@{generate\+\_\+successor}!problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}}
+\subsubsection{\texorpdfstring{generate\+\_\+successor()}{generate\_successor()}}
+{\footnotesize\ttfamily struct \hyperlink{structState}{State}$\ast$ generate\+\_\+successor (\begin{DoxyParamCaption}\item[{struct \hyperlink{structState}{State} $\ast$}]{old\+\_\+state,  }\item[{struct \hyperlink{structInputData}{Input\+Data} $\ast$}]{input\+\_\+data }\end{DoxyParamCaption})}
+
+$<$ The flag is set when a new valid bid is detected from a company while the bids from the remaining companies stays the same \mbox{\Hypertarget{problem__solving__by__hill__climbing__search_8c_abf9e6b7e6f15df4b525a2e7705ba3089}\label{problem__solving__by__hill__climbing__search_8c_abf9e6b7e6f15df4b525a2e7705ba3089}} 
+\index{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}!main@{main}}
+\index{main@{main}!problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}}
+\subsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char const $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+The main function from which all function calls are made. 
+
+The main function acts as the problem solving agent. This is because all function calls are made from main -\/ formulate\+\_\+goal, find\+\_\+initial\+\_\+state, and generate\+\_\+successor. This was chosen because of the absence of O\+OP in C.
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & The number of command prompt arguments \\
+\hline
+{\em argv} & The array containing all the command prompt arguments \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 
+\end{DoxyReturn}
+\mbox{\Hypertarget{problem__solving__by__hill__climbing__search_8c_abf96505e915ac91777e34ee4803fd109}\label{problem__solving__by__hill__climbing__search_8c_abf96505e915ac91777e34ee4803fd109}} 
+\index{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}!take\+\_\+input@{take\+\_\+input}}
+\index{take\+\_\+input@{take\+\_\+input}!problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c@{problem\+\_\+solving\+\_\+by\+\_\+hill\+\_\+climbing\+\_\+search.\+c}}
+\subsubsection{\texorpdfstring{take\+\_\+input()}{take\_input()}}
+{\footnotesize\ttfamily struct \hyperlink{structInputData}{Input\+Data}$\ast$ take\+\_\+input (\begin{DoxyParamCaption}\item[{char}]{file\+\_\+name\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Takes in input from the file name specified. 
+
+Example of input file -\/ \char`\"{}1.\+txt\char`\"{}. The input is stored in a 3-\/D array. The state is taken as the total revenue from allocating the coal blocks at that instant. The maximum value of the revenue is the sum of max revenue offered by each company since all other combinations will give revenue less than this amount. This maximum value is taken as the goal state. The solution obtained can\textquotesingle{}t reach this value but will be the nearest to it.
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\+\_\+name} & the file to take input from \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
