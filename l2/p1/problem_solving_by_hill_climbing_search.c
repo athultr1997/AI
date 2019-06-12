@@ -180,6 +180,30 @@ int check_bid_collision(int *allocated_coal_blocks,int *bid,int bid_length)
 	return true;
 }
 
+void swap(int *x, int *y)  
+{  
+    int temp;  
+    temp = *x;  
+    *x = *y;  
+    *y = temp;  
+}
+
+void permute(int *a, int l, int r)  
+{  
+    int i;  
+    if (l == r)  
+        printf("%d\n",*a);
+    else
+    {  
+        for (i = l; i <= r; i++)  
+        {  
+            swap((a+l), (a+i));  
+            permute(a, l+1, r);  
+            swap((a+l), (a+i)); //backtrack  
+        }  
+    }  
+}  
+
 /**
  * @brief Utility function to shuffle the order of companies
  *
@@ -194,7 +218,9 @@ int check_bid_collision(int *allocated_coal_blocks,int *bid,int bid_length)
  */
 void shuffle(struct InputData *input_data)
 {
-	
+	int array[] = {1,2,3,4};
+	permute(array,0,3);
+
 
 }
 
@@ -499,34 +525,38 @@ int main(int argc, char const *argv[])
 	struct InputData *input_data = take_input(file_name);
 	display_input_data(input_data);
 
-	struct State *goal_state = formulate_goal(input_data);
-	printf("cost at goal state = %d\n",cost_heuristic(goal_state,input_data));
+	// struct State *goal_state = formulate_goal(input_data);
+	// printf("cost at goal state = %d\n",cost_heuristic(goal_state,input_data));
 
-	/* Problem Definition*/
-	struct State *state = find_initial_state(input_data);
+	// /* Problem Definition*/
+	// struct State *state = find_initial_state(input_data);
 
-	for(int i=0;i<max_iter;i++)
-	{
-		if(is_goal_state(state,goal_state)==true)
-		{
-			// save_result(state);
-			display_state(state,input_data);
-			break;
-		}
-		else
-		{	
-			state = generate_successor(state,input_data); /* deallocate old state in this function */
-		}
-	}
+	// for(int i=0;i<max_iter;i++)
+	// {
+	// 	if(is_goal_state(state,goal_state)==true)
+	// 	{
+	// 		// save_result(state);
+	// 		display_state(state,input_data);
+	// 		break;
+	// 	}
+	// 	else
+	// 	{	
+	// 		state = generate_successor(state,input_data); /* deallocate old state in this function */
+	// 	}
+	// }
 
-	// save_result(state);
+	// // save_result(state);
 
-	display_state(goal_state,input_data);
+	// display_state(goal_state,input_data);
 
-	display_state(state,input_data);
+	// display_state(state,input_data);
 
-	deallocate_state(state);
+	// deallocate_state(state);
+	
+	shuffle(input_data);
 	deallocate_input_data(input_data);
+
+	
 
 	return 0;
 }
