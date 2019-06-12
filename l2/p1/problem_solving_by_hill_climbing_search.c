@@ -1,4 +1,4 @@
-/**
+ /**
  * @file problem_solving_by_hill_climbing_search.c
  * @brief Code for solving the 'Coal Allocation Problem' described in part-1 of l2.pdf
  *        using 'Hill Climbing Search with Random Restarts'.
@@ -52,7 +52,7 @@ struct InputData
 					     company id (cid). The second dimension corresponds to the bids of the 
 					     particular company set by the first dimension. The first instance in the 
 					     third dimension is the bid value and the rest corresponds to the block 
-					     id of the coal. Example usages:\n
+					     ids of the coal. Example usages:\n
 					     bid_data[i]: all the bid data corresponding to the company defined by id i+1 \n
 					     bid_data[i][j]: details of (i+1)-th company's j-th bid \n
 					     bid_data[i][j][0]: bid value \n
@@ -101,6 +101,57 @@ struct State *create_copy_state(struct State *state)
 	return new_state;
 }
 
+/**
+* @brief Deallocates the memory used by an instance of struct State
+* @param state The instance of struct State whose memory is to be deallocated
+* @return void
+*/
+void deallocate_state(struct State *state)
+{
+	if(state->selected_bids_from_companies!=NULL)
+	{
+		free(state->selected_bids_from_companies);
+		state->selected_bids_from_companies = NULL;		
+	}
+	if(state->allocated_coal_blocks!=NULL)
+	{
+		free(state->allocated_coal_blocks);
+		state->allocated_coal_blocks = NULL;
+	}
+}
+
+void display_state(struct State *state, struct InputData *input_data)
+{
+	printf("********STATE********\n");
+	printf("num_of_companies = %d\n",state->num_of_companies);
+	
+	printf("selected_bids_from_companies =\n");
+	for(int i=0;i<state->num_of_companies;i++)
+	{
+		printf("	company %d: ",i+1);
+		if(state->selected_bids_from_companies[i]==no_bid)
+		{
+			printf("no bids selected\n");
+		}
+		else
+		{
+			for(int j=0;j<input_data->bid_data_dimensions[i][state->selected_bids_from_companies[i]];j++)
+			{
+				printf("%d ",input_data->bid_data[i][state->selected_bids_from_companies[i]][j]);
+			}
+			printf("\n");
+		}
+	}
+
+	printf("allocated_coal_blocks =");
+	for(int i=0;i<state->num_of_coal_blocks;i++)
+	{
+		printf("%d:%d,",i+1,state->allocated_coal_blocks[i]);
+	}
+	printf("\n");
+	printf("*********************\n");
+}
+
 int cost_heuristic(struct State *state,struct InputData *input_data)
 {
 	int cost = 0;
@@ -129,66 +180,95 @@ int check_bid_collision(int *allocated_coal_blocks,int *bid,int bid_length)
 	return true;
 }
 
+/**
+ * @brief Utility function to shuffle the order of companies
+ *
+ * The companies are taken in the default order specified in the text file initially.
+ * The order of the companies matters a lot because if a bid is selected 
+ * from a company first it seals the coal blocks in its bid so that no 
+ * other company can bid for it further. Thus, there arises a need to 
+ * shuffle the order of the companies.
+ *
+ * @param input_data The input data taken from the text file
+ * @return void
+ */
+void shuffle(struct InputData *input_data)
+{
+	
+
+}
+
 struct State *generate_successor(struct State *old_state,struct InputData *input_data)
 {	
-	struct State *new_state = create_copy_state(old_state);
 	struct State *successor_state = create_copy_state(old_state);
+	
 
 	int h_max = 0;
 	int h;
-	int flag = true; /**< The flag is set when a new valid bid is detected from a company while 
-						  the bids from the remaining companies stays the same */
+	
 	for(int i=0;i<input_data->num_of_companies;i++)
 	{
-		/* setting all the blocks corresponding to the currently selected bid from company i to false */
-		for(int m=0;m<input_data->bid_data_dimensions[i][new_state->selected_bids_from_companies[i]];m++)
-		{
-			new_state->allocated_coal_blocks[input_data->bid_data[i][new_state->selected_bids_from_companies[i]][m+1]-1] = false;
-		}
-
 		for(int j=-1;j<input_data->bid_data_dimensions_dimensions[i];j++) /*-1 corresponds to no_bid */
 		{
 			if(j!=old_state->selected_bids_from_companies[i])
 			{
+				struct State *new_state = create_copy_state(old_state);
+
+				int flag = true; /**< The flag is set when a new valid bid is detected from a company while 
+						  			  the bids from the remaining companies stays the same */
+				
+				/* setting all the blocks corresponding to the currently selected bid from company i to false */
+				for(int m=1;m<input_data->bid_data_dimensions[i][new_state->selected_bids_from_companies[i]];m++)
+				{
+					new_state->allocated_coal_blocks[input_data->bid_data[i][new_state->selected_bids_from_companies[i]][m]-1] = false;
+				}
+
 				new_state->selected_bids_from_companies[i] = j;
 
-				for(int m=0;m<input_data->bid_data_dimensions[i][new_state->selected_bids_from_companies[i]];m++)
+				if(new_state->selected_bids_from_companies[i]!=no_bid)
 				{
-					if(allocated_coal_blocks[input_data->bid_data[i][new_state->selected_bids_from_companies[i]][m+1]-1] == true)
+					for(int m=0;m<input_data->bid_data_dimensions[i][new_state->selected_bids_from_companies[i]];m++)
 					{
-						flag = false;
-						break;
+						if(new_state->allocated_coal_blocks[input_data->bid_data[i][new_state->selected_bids_from_companies[i]][m]-1] == true)
+						{
+							flag = false;
+							break;
+						}
 					}
 				}
 
 				if(flag==true)
 				{
-					for(int m=0;m<input_data->bid_data_dimensions[i][new_state->selected_bids_from_companies[i]];m++)
+					if(new_state->selected_bids_from_companies[i]!=no_bid)
 					{
-						new_state->allocated_coal_blocks[input_data->bid_data[i][new_state->selected_bids_from_companies[i]][m+1]-1] = true;
+						for(int m=1;m<input_data->bid_data_dimensions[i][new_state->selected_bids_from_companies[i]];m++)
+						{
+							new_state->allocated_coal_blocks[input_data->bid_data[i][new_state->selected_bids_from_companies[i]][m]-1] = true;
+						}
 					}
 
-					h = cost_heuristic(new_state);
+					h = cost_heuristic(new_state,input_data);
 					if(h>h_max)
 					{
 						h_max = h;
-						deallocate(successor_state);
+						deallocate_state(successor_state);
 						successor_state = create_copy_state(new_state);
 					}
 
-					for(int m=0;m<input_data->bid_data_dimensions[i][new_state->selected_bids_from_companies[i]];m++)
-					{
-						new_state->allocated_coal_blocks[input_data->bid_data[i][new_state->selected_bids_from_companies[i]][m+1]-1] = false;
-					}
+					// for(int m=0;m<input_data->bid_data_dimensions[i][new_state->selected_bids_from_companies[i]];m++)
+					// {
+					// 	new_state->allocated_coal_blocks[input_data->bid_data[i][new_state->selected_bids_from_companies[i]][m+1]-1] = false;
+					// 	new_state->selected_bids_from_companies[i] = old_state->selected_bids_from_companies[i];
+					// }					
 				}
-									
-			}			
+				deallocate_state(new_state);									
+			}						
 		}
 	}
 
+	deallocate_state(old_state);
 
-	deallocate(new_state);
-	deallocate(old_state);
+	display_state(successor_state,input_data);
 
 	return successor_state;
 }
@@ -379,38 +459,6 @@ void display_input_data(struct InputData *input_data)
 	}
 }
 
-void display_state(struct State *state, struct InputData *input_data)
-{
-	printf("********STATE********\n");
-	printf("num_of_companies = %d\n",state->num_of_companies);
-	
-	printf("selected_bids_from_companies =\n");
-	for(int i=0;i<state->num_of_companies;i++)
-	{
-		printf("	company %d: ",i+1);
-		if(state->selected_bids_from_companies[i]==no_bid)
-		{
-			printf("no bids selected\n");
-		}
-		else
-		{
-			for(int j=0;j<input_data->bid_data_dimensions[i][state->selected_bids_from_companies[i]];j++)
-			{
-				printf("%d ",input_data->bid_data[i][state->selected_bids_from_companies[i]][j]);
-			}
-			printf("\n");
-		}
-	}
-
-	printf("allocated_coal_blocks =");
-	for(int i=0;i<state->num_of_coal_blocks;i++)
-	{
-		printf("%d:%d,",i+1,state->allocated_coal_blocks[i]);
-	}
-	printf("\n");
-	printf("*********************\n");
-}
-
 void deallocate_input_data(struct InputData *input_data)
 {
 	for(int i=0;i<input_data->num_of_companies;i++)
@@ -433,18 +481,6 @@ void deallocate_input_data(struct InputData *input_data)
 }
 
 /**
-* @brief Deallocates the memory used by an instance of struct State
-* @param state The instance of struct State whose memory is to be deallocated
-* @return void
-*/
-
-void deallocate_state(struct State *state)
-{
-	free(state->selected_bids_from_companies);
-	free(state->allocated_coal_blocks);
-}
-
-/**
 * @brief The main function from which all function calls are made.
 *
 * The main function acts as the problem solving agent. This is because
@@ -458,8 +494,8 @@ void deallocate_state(struct State *state)
 
 int main(int argc, char const *argv[])
 {
-	int max_iter = 1000;
-	char file_name[] = "1.txt"; /* an integer value */
+	int max_iter = 10;
+	char file_name[] = "2.txt"; /* an integer value */
 	struct InputData *input_data = take_input(file_name);
 	display_input_data(input_data);
 
@@ -469,23 +505,23 @@ int main(int argc, char const *argv[])
 	/* Problem Definition*/
 	struct State *state = find_initial_state(input_data);
 
-	// for(int i=0;i<max_iter;i++)
-	// {
-	// 	if(is_goal_state(state)==true)
-	// 	{
-	// 		save_result(state);
-	// 		display_state(state);
-	// 		break;
-	// 	}
-	// 	else
-	// 	{
-	// 		state = generate_successor(state,input_data); /* deallocate old state in this function */
-	// 	}
-	// }
+	for(int i=0;i<max_iter;i++)
+	{
+		if(is_goal_state(state,goal_state)==true)
+		{
+			// save_result(state);
+			display_state(state,input_data);
+			break;
+		}
+		else
+		{	
+			state = generate_successor(state,input_data); /* deallocate old state in this function */
+		}
+	}
 
 	// save_result(state);
 
-	// display_state(goal_state);
+	display_state(goal_state,input_data);
 
 	display_state(state,input_data);
 
